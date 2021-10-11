@@ -10,7 +10,7 @@ tasks:
       pip install -e .
       flask init-db
     command: |
-      flask run
+      python app.py
 
 vscode:
   extensions:
