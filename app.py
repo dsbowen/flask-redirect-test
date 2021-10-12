@@ -1,7 +1,19 @@
-from flask import Flask, redirect, url_for
+import os
+import subprocess
+
+import flask
+from flask import Flask, request, url_for
 
 app = Flask(__name__)
-# app.config["SECRET_KEY"] = "secret"
+
+def redirect(url):
+    if url.startswith("/") and (gitpod_url:=os.environ.get("GITPOD_WORKSPACE_URL")):
+        port = request.url_root.lstrip("http://localhost:")[:4]
+        gitpod_url = subprocess.check_output(f"gp url {port}", shell=True).decode("utf-8")
+        print(gitpod_url.strip() + url)
+        return redirect(gitpod_url.strip() + url)
+
+    return flask.redirect(url)
 
 @app.route("/")
 def index():
