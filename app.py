@@ -1,7 +1,18 @@
-from flask import Flask, redirect, url_for
+import os
+import subprocess
+
+import flask
+from flask import Flask, request, url_for
+
+def redirect(url):
+    if url.startswith("/") and "GITPOD_HOST" in os.environ:
+        port = request.url_root.lstrip("http://localhost:")[:4]
+        gp_url_port = subprocess.check_output(f"gp url {port}", shell=True)
+        return flask.redirect(gp_url_port.decode("utf-8").strip() + url)
+
+    return flask.redirect(url)
 
 app = Flask(__name__)
-# app.config["SECRET_KEY"] = "secret"
 
 @app.route("/")
 def index():
